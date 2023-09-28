@@ -1,5 +1,5 @@
 [![Node.js CI](https://github.com/jeff-yc-wong/python-lms/actions/workflows/node.js.yml/badge.svg)](https://github.com/jeff-yc-wong/python-lms/actions/workflows/node.js.yml)
-# Use Node v18.X
+# Use Node v18.18.0
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
