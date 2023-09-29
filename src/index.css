@@ -40,8 +40,8 @@ body {
 }
 
 #yourcode {
-  width: 20vw;
-  height: 40vh;
+  width: 95%;
+  height: 50vh;
   padding: 10px;
   font-size: small;
 }
@@ -61,4 +61,28 @@ body {
 .gutter.gutter-horizontal {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
   cursor: col-resize;
+}
+
+#lesson {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.lesson {
+  transition: width 0.5s ease;
+}
+
+.lesson.collapsed {
+  width: 0 !important;
+}
+
+.shrink {
+  width: 0;
+}
+
+
+#shrink-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
