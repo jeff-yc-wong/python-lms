@@ -21,11 +21,6 @@ function builtinRead(x) {
   return window.Sk.builtinFiles["files"][x];
 }
 
-// Here's everything you need to run a python program in skulpt
-// grab the code from your textarea
-// get a reference to your pre element for output
-// configure the output function
-// call Sk.importMainWithBody()
 function runit() {
   var prog = document.getElementById("yourcode").value;
   var mypre = document.getElementById("output");
@@ -55,7 +50,7 @@ function runit() {
 }
 
 function clearOutput() {
-    document.getElementById("output").innerHTML = "> ";
+    document.getElementById("output").innerHTML = "";
 }
 
 function CodeEditor() {
