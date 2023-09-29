@@ -71,7 +71,7 @@ for c in ['red', 'green', 'yellow', 'blue']:
 print("Hello World")`;
 
   return (
-    <div id="editor" className="ml-0 pt-5 container text-start">
+    <div id="editor" className="ms-0 p-4 container text-start">
       <div className="row justify-content-center">
         <div className="col">
           <h3>Code</h3>
@@ -89,13 +89,13 @@ print("Hello World")`;
           </form>
         </div>
 
-        <div className="col p-2">
+        <div className="col">
         <h3>Canvas</h3>
         <div id="mycanvas"></div>
         </div>
       </div>
       <div className="mt-3 row">
-          <div className="col p-2"> 
+          <div className="col"> 
               <h3>Output</h3>
               <pre id="output"></pre>
               <br />
