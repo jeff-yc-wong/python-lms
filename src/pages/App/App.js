@@ -1,11 +1,13 @@
 import "./App.css";
 import CodeEditor from "../../components/CodeEditor/CodeEditor";
+import SidebarMenu from "../../components/SideBar";
 import Split from "react-split";
 
 function App() {
   return (
     <div className="App">
       <Split className="split" sizes={[35, 65]}>
+      <SidebarMenu/>
         <div id="lesson" className="p-5 container text-start">
           <h3>Lesson</h3>
         </div>
