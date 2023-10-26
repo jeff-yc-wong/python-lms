@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const TopMenu = () => {
   return (
@@ -19,10 +20,10 @@ const TopMenu = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link" href="#" style={{ fontSize: '20px', margin: '20px' }}>Dashboard</a>
+              <Link to="/dashboard" className="nav-link" href="#" style={{ fontSize: '20px', margin: '20px' }}>Dashboard</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#" style={{ fontSize: '20px', margin: '20px' }}>Modules</a>
+              <Link to="/modules" className="nav-link" href="#" style={{ fontSize: '20px', margin: '20px' }}>Modules</Link>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="#" style={{ fontSize: '20px', margin: '20px' }}>Schedule</a>
