@@ -1,0 +1,7 @@
+.editor-page {
+  text-align: center;
+  background-color: #282c34;
+  height: 100vh;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}

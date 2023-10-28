@@ -1,19 +1,55 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./pages/App/App";
 import reportWebVitals from "./reportWebVitals";
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+
+// importing the top menu
+import TopMenu from "./components/TopMenu/TopMenu";
+
+// importing the different pages
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Editor from "./pages/Editor/Editor";
+import ModuleList from "./pages/ModuleList/ModuleList";
+
+function AppLayout() {
+  return (
+    <>
+      <TopMenu />
+      <Outlet />
+    </>
+  );
+};
+
+
 
 const router = createBrowserRouter([
   {
-    path: "/home",
-    element: <App />,
+    element: <AppLayout />,
+    children: [
+      {
+        path: "/home",
+        element: <Editor />,
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "modules",
+        element: <ModuleList />,
+      },
+      {
+        path: "*",
+        element: <Navigate to="/home" replace={true} />,
+      },
+    ],
   },
-  {
-    path: "/*",
-    element: <Navigate to="/home" replace={true}/>,
-  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

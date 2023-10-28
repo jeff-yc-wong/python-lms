@@ -10,7 +10,7 @@ const ModuleList = () => {
 
   return (
     <div className="container mt-5">
-      <h1>Module List</h1>
+      <h1 className="text-light">Module List</h1>
       <ul className="list-group">
         {Module.map(Module => (
           <li key={Module.id} className="list-group-item">{Module.title}</li>

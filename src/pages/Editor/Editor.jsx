@@ -1,12 +1,11 @@
-import "./App.css";
-import CodeEditor from "../../components/CodeEditor/CodeEditor";
-import TopMenu from "../../components/TopMenu";
 import Split from "react-split";
+import CodeEditor from "../../components/CodeEditor/CodeEditor";
+import "./Editor.css";
 
-function App() {
+function Editor() {
   return (
-    <div className="App">
-      <TopMenu />
+    <>
+    <div className="editor-page">
       <Split className="split" sizes={[35, 65]}>
         <div id="lesson" className="p-5 container text-start">
           <h3>Lesson</h3>
@@ -16,7 +15,8 @@ function App() {
         </div>
       </Split>
     </div>
+    </>
   );
 }
 
-export default App;
+export default Editor;
