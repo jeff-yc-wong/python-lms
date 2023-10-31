@@ -10,8 +10,8 @@ function Editor() {
         <div id="lesson" className="p-5 container text-start">
           <h3>Lesson</h3>
         </div>
-        <div style={{minWidth: "65%"}}>
-          <CodeEditor />
+        <div>
+          <CodeEditor style={{width: "300px !important"}}/>
         </div>
       </Split>
     </div>

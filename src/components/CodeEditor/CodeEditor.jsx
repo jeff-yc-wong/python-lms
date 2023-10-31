@@ -50,7 +50,7 @@ function runit() {
 }
 
 function clearOutput() {
-    document.getElementById("output").innerHTML = "";
+  document.getElementById("output").innerHTML = "";
 }
 
 function CodeEditor() {
@@ -66,8 +66,8 @@ for c in ['red', 'green', 'yellow', 'blue']:
 print("Hello World")`;
 
   return (
-    <div id="editor" className="ml-0 pt-5 container text-start">
-      <div className="row justify-content-center">
+    <div id="editor" className="container-flex">
+      <div className="row justify-content-center" style={{ width: "90%" }}>
         <div className="col">
           <h3>Code</h3>
           <form>
@@ -85,19 +85,23 @@ print("Hello World")`;
         </div>
 
         <div className="col p-2">
-        <h3>Canvas</h3>
-        <div id="mycanvas"></div>
+          <h3>Canvas</h3>
+          <div id="mycanvas"></div>
         </div>
       </div>
-      <div className="mt-3 row">
-          <div className="col p-2"> 
-              <h3>Output</h3>
-              <pre id="output"></pre>
-              <br />
-              <button className="btn btn-success" type="button" onClick={clearOutput}>
-                Clear
-              </button>
-          </div>
+      <div className="mt-3 row" style={{ width: "90%" }}>
+        <div className="col p-2">
+          <h3>Output</h3>
+          <pre id="output"></pre>
+          <br />
+          <button
+            className="btn btn-success"
+            type="button"
+            onClick={clearOutput}
+          >
+            Clear
+          </button>
+        </div>
       </div>
     </div>
   );
