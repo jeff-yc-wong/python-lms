@@ -8,6 +8,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // importing the top menu
 import TopMenu from "./components/TopMenu/TopMenu";
@@ -17,6 +18,15 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Editor from "./pages/Editor/Editor";
 import ModuleList from "./pages/ModuleList/ModuleList";
 
+const ProtectedRoute = ({ children }) => {
+  let token = true;
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
 function AppLayout() {
   return (
     <>
@@ -25,8 +35,6 @@ function AppLayout() {
     </>
   );
 };
-
-
 
 const router = createBrowserRouter([
   {
@@ -49,14 +57,15 @@ const router = createBrowserRouter([
         element: <Navigate to="/home" replace={true} />,
       },
     ],
-  },
-]);
+  },]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <GoogleOAuthProvider clientId="893030336396-4boqmdcq2lqtofpd9p3itcgisoadehig.apps.googleusercontent.com">
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  </GoogleOAuthProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function
