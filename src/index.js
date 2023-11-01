@@ -17,6 +17,7 @@ import TopMenu from "./components/TopMenu/TopMenu";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Editor from "./pages/Editor/Editor";
 import ModuleList from "./pages/ModuleList/ModuleList";
+import LoginPage from "./pages/Login/Login";
 
 const ProtectedRoute = ({ children }) => {
   let token = true;
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "modules",
         element: <ModuleList />,
+      },
+      {
+        path: "login",
+        element: <LoginPage />,
       },
       {
         path: "*",

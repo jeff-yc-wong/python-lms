@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import "./TopMenu.css";
 
 function TopMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -14,8 +15,8 @@ function TopMenu() {
 
   return (
     <>
-      <nav className="navbar navbar-dark bg-dark sticky-top">
-        <div className="container-fluid">
+      <nav id="topmenu" className="navbar navbar-dark bg-dark sticky-top">
+        <div className="container-fluid align-items-center">
           <button
             className="navbar-toggler"
             type="button"
@@ -28,7 +29,7 @@ function TopMenu() {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <h5 style={{ color: "white" }}>This is Module 1</h5>
+          <h5 className="p-0 m-0" style={{ color: "white" }}>This is Module 1</h5>
           <button
             type="button"
             className="p-0 btn"

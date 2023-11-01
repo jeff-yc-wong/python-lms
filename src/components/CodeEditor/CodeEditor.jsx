@@ -1,3 +1,5 @@
+import "./CodeEditor.css";
+
 function outf(text) {
   var mypre = document.getElementById("output");
   mypre.style.color = "black";
@@ -66,15 +68,13 @@ for c in ['red', 'green', 'yellow', 'blue']:
 print("Hello World")`;
 
   return (
-    <div id="editor" className="container-flex">
-      <div className="row justify-content-center" style={{ width: "90%" }}>
+    <div id="codeeditor" className="m-0 p-0 container">
+      <div className="row justify-content-center">
         <div className="col">
           <h3>Code</h3>
           <form>
             <textarea
               id="yourcode"
-              cols="50"
-              rows="10"
               defaultValue={defaultCode}
             ></textarea>
             <br />
@@ -84,13 +84,16 @@ print("Hello World")`;
           </form>
         </div>
 
-        <div className="col p-2">
+        <div className="col">
+          <div className="row justify-content-center">
           <h3>Canvas</h3>
           <div id="mycanvas"></div>
+          </div>
         </div>
       </div>
-      <div className="mt-3 row" style={{ width: "90%" }}>
-        <div className="col p-2">
+
+      <div className="mt-3 row justify-content-center">
+        <div className="col">
           <h3>Output</h3>
           <pre id="output"></pre>
           <br />
