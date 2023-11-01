@@ -85,8 +85,8 @@ print("Hello World")`;
         </div>
 
         <div className="col p-2">
-        <h3>Canvas</h3>
-        <div id="mycanvas"></div>
+          <h3>Canvas</h3>
+          <div id="mycanvas"></div>
         </div>
       </div>
       <div className="mt-3 row">

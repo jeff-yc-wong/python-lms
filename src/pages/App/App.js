@@ -3,6 +3,7 @@ import CodeEditor from "../../components/CodeEditor/CodeEditor";
 import Split from "react-split";
 
 function App() {
+  
   return (
     <div className="App">
       <Split className="split" sizes={[35, 65]}>
