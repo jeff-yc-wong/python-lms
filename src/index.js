@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+
 // importing the top menu
 import TopMenu from "./components/TopMenu/TopMenu";
 
@@ -17,6 +18,7 @@ import TopMenu from "./components/TopMenu/TopMenu";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Editor from "./pages/Editor/Editor";
 import ModuleList from "./pages/ModuleList/ModuleList";
+import HomePage from "./pages/HomePage/HomePage";
 
 const ProtectedRoute = ({ children }) => {
   let token = true;
@@ -42,7 +44,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/home",
-        element: <Editor />,
+        element: <HomePage />,
       },
       {
         path: "dashboard",
