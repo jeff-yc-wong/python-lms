@@ -18,6 +18,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Editor from "./pages/Editor/Editor";
 import ModuleList from "./pages/ModuleList/ModuleList";
 
+// eslint-disable-next-line
 const ProtectedRoute = ({ children }) => {
   let token = true;
   if (!token) {
