@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import PropType from "prop-types"
 import { Link } from "react-router-dom";
 import "./TopMenu.css";
 
-function TopMenu() {
+function TopMenu({ lessonTitle }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [currentLink, setCurrentLink] = useState("home");
 
@@ -29,7 +30,9 @@ function TopMenu() {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <h5 className="p-0 m-0" style={{ color: "white" }}>This is Module 1</h5>
+          { lessonTitle !== undefined ? 
+            <h5 style={{ color: "white" }}>This is Module 1</h5> : ""
+          }
           <button
             type="button"
             className="p-0 btn"
@@ -138,6 +141,10 @@ function TopMenu() {
       </nav>
     </>
   );
+}
+
+TopMenu.propTypes = {
+  lessonTitle: PropType.string,
 }
 
 export default TopMenu;
