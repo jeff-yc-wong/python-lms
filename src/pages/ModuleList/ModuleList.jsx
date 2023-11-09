@@ -2,39 +2,53 @@ import React, { useState } from 'react';
 import './ModuleList.css';
 
 const ModulesList = () => {
-  const [expandedModule, setExpandedModule] = useState(null);
+  const [expandedModules, setExpandedModules] = useState([]);
 
   const modules = [
     {
       id: 1,
-      title: 'Module 1',
+      title: '1: Intro to Python',
       submodules: [
-        { id: 101, title: 'Submodule 1.1' },
-        { id: 102, title: 'Submodule 1.2' },
+        {
+          id: 101,
+          title: '1.1: Setup',
+          subsubmodules: [
+            { id: 1001, title: '1.1.1: Hello World' },
+            { id: 1002, title: '1.1.2: Variables' },
+          ],
+        },
+        { id: 102, title: '1.2: Input/Output(I/O)', 
+        subsubmodules: [
+          { id: 1003, title: '1.2.1: Output' },
+          { id: 1004, title: '1.2.2: Input' },
+        ],
+      },
       ],
     },
     {
       id: 2,
-      title: 'Module 2',
+      title: '2: Control Flow',
       submodules: [
-        { id: 201, title: 'Submodule 2.1' },
-        { id: 202, title: 'Submodule 2.2' },
+        { id: 201, title: '2.1: Conditional Math' },
+        { id: 202, title: '2.2: If/Else Statement' },
       ],
     },
     // Add more modules and submodules as needed
   ];
 
   const handleModuleClick = (moduleId) => {
-    if (expandedModule === moduleId) {
-      setExpandedModule(null);
-    } else {
-      setExpandedModule(moduleId);
-    }
+    setExpandedModules(prevState => {
+      if (prevState && prevState.includes(moduleId)) {
+        return prevState.filter(id => id !== moduleId);
+      } else {
+        return [...(prevState || []), moduleId];
+      }
+    });
   };
 
   return (
     <div className="container mt-5">
-      <h1 className='title'>Module List</h1>
+      <h1 className="title">Modules List</h1>
       <ul className="list-group">
         {modules.map(module => (
           <li key={module.id} className="list-group-item">
@@ -43,12 +57,30 @@ const ModulesList = () => {
               onClick={() => handleModuleClick(module.id)}
             >
               {module.title}
+              <span className="triangle">
+                {expandedModules.includes(module.id) ? '▼' : '▶'}
+              </span>
             </div>
-            {expandedModule === module.id && (
+            {expandedModules.includes(module.id) && (
               <ul className="list-group mt-2">
                 {module.submodules.map(submodule => (
                   <li key={submodule.id} className="list-group-item">
-                    {submodule.title}
+                    <div
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => handleModuleClick(submodule.id)}
+                    >
+                      {submodule.title}
+                      
+                    </div>
+                    {expandedModules.includes(submodule.id) && (
+                      <ul className="list-group mt-2">
+                        {submodule.subsubmodules.map(subsubmodule => (
+                          <li key={subsubmodule.id} className="list-group-item">
+                            {subsubmodule.title}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 ))}
               </ul>
