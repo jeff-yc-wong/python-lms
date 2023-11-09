@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropType from "prop-types"
 import { Link } from "react-router-dom";
+import "./TopMenu.css";
 
 function TopMenu({ lessonTitle }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,8 +16,8 @@ function TopMenu({ lessonTitle }) {
 
   return (
     <>
-      <nav className="navbar navbar-dark bg-dark sticky-top">
-        <div className="container-fluid">
+      <nav id="topmenu" className="navbar navbar-dark bg-dark sticky-top">
+        <div className="container-fluid align-items-center">
           <button
             className="navbar-toggler"
             type="button"

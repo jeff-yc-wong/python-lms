@@ -71,6 +71,10 @@ const router = createBrowserRouter([
         element: <ModuleList />,
       },
       {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
         path: "*",
         element: <Navigate to="/home" replace={true} />,
       },
