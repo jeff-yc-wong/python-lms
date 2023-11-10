@@ -1,9 +1,38 @@
 import "./Login.css";
 import { Navigate } from "react-router-dom";
-import React, { useState } from "react";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import GoogleButton from "../../components/GoogleButton/GoogleButton";
+
 function LoginPage() {
   const [user, setUser] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(true);
+  const passwordRef = useRef(null);
+  const [userType, setUserType] = useState("");
+
+  const handleEmailLogin = (e) => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        console.log("signed in");
+        const user = userCredential.user;
+        setUser(user);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  };
 
   const handleGoogleLogin = () => {
     console.log("Google Login");
@@ -17,6 +46,7 @@ function LoginPage() {
         // The signed-in user info.
         const user = result.user;
         console.log(user);
+        setUser(user);
         // IdP data available using getAdditionalUserInfo(result)
         // ...
       })
@@ -31,52 +61,112 @@ function LoginPage() {
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
+  };
+
+  const togglePasswordVisibility = () => {
+    if (passwordRef.current.type === "password") {
+      passwordRef.current.type = "text";
+    } else {
+      passwordRef.current.type = "password";
+    }
+  };
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+    return unsubscribe;
+  });
+
+  if (loading) {
+    return <p>Loading...</p>;
   }
-  return user == null ? (
-    <div
-      id="login"
-      className="container-fluid d-flex fill-height justify-content-center align-items-center"
-    >
-      <div className="row">
-        <button className="gsi-material-button" onClick={handleGoogleLogin}>
-          <div className="gsi-material-button-state"></div>
-          <div className="gsi-material-button-content-wrapper">
-            <div className="gsi-material-button-icon">
-              <svg
-                version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 48 48"
-                style={{ display: "block" }}
-              >
-                <path
-                  fill="#EA4335"
-                  d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
-                ></path>
-                <path
-                  fill="#4285F4"
-                  d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
-                ></path>
-                <path
-                  fill="#FBBC05"
-                  d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
-                ></path>
-                <path
-                  fill="#34A853"
-                  d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
-                ></path>
-                <path fill="none" d="M0 0h48v48H0z"></path>
-              </svg>
-            </div>
-            <span className="gsi-material-button-contents">
-              Continue with Google
-            </span>
-            <span style={{ display: "none" }}>Continue with Google </span>
+
+  // if (userType === "") {
+  //   return (
+  //     <div id="login" className="container">
+  //       <div className="row h-100 justify-content-center align-items-center">
+  //         <div className="col text-light">Student</div>
+  //         <div className="col text-light">Instructor</div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  if (user) {
+    return <Navigate to="/home" replace={true}></Navigate>;
+  }
+
+  return (
+    <div id="login" className="container">
+      <div className="row h-100 justify-content-center align-items-center">
+        {/* <div className="col"></div> */}
+        <div className="col">
+          <div className="row">
+            <h1 className="mb-5 text-light text-center fw-bold">Python LMS</h1>
           </div>
-        </button>
+          <div className="row">
+            <h3 className="text-light fw-bold">Sign In</h3>
+            <div className="text-light">
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1">Email address</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  onChange={(e) => setEmail(e.target.value)}
+                  aria-describedby="emailHelp"
+                  required
+                  placeholder="Enter email"
+                />
+                <div className="invalid-feedback">
+                  Please enter a valid email address.
+                </div>
+              </div>
+              <div className="mb-0">
+                <label htmlFor="exampleInputPassword1">Password</label>
+                <input
+                  type="password"
+                  ref={passwordRef}
+                  className="form-control"
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password"
+                  required
+                />
+                <div class="mt-2 form-group form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="exampleCheck1"
+                    onChange={togglePasswordVisibility}
+                  />
+                  <label htmlFor="togglePasswordVisibility">
+                    Show Password
+                  </label>
+                </div>
+              </div>
+              <button
+                className="btn btn-light float-end"
+                onClick={handleEmailLogin}
+              >
+                Login
+              </button>
+            </div>
+          </div>
+          <div id="seperator" className="text-center">
+            ---------------------- or ----------------------
+          </div>
+          <div className="m-4 row justify-content-center">
+            <GoogleButton onClick={handleGoogleLogin} />
+          </div>
+        </div>
       </div>
     </div>
-  ) : (
-    <Navigate to="/home" replace={true} state={{ user: user }}></Navigate>
   );
 }
 

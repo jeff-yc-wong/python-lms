@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropType from "prop-types"
 import { Link } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
 import "./TopMenu.css";
 
 function TopMenu({ lessonTitle }) {
@@ -13,6 +14,20 @@ function TopMenu({ lessonTitle }) {
     }
     setMenuOpen(!menuOpen);
   };
+
+  const handleSignOut = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log("signed out");
+        window.location.reload();
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log(error.message);
+      });
+  }
 
   return (
     <>
@@ -36,6 +51,7 @@ function TopMenu({ lessonTitle }) {
           <button
             type="button"
             className="p-0 btn"
+            onClick={handleSignOut}
             style={{ color: "white", fontSize: "1.8em" }}
           >
             <span className="bi bi-box-arrow-right" />

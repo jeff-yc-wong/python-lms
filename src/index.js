@@ -8,6 +8,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 // importing the top menu
 import TopMenu from "./components/TopMenu/TopMenu";
@@ -21,15 +22,13 @@ import LoginPage from "./pages/Login/Login";
 // import firebase configs
 import "./service/firebase";
 
-
-
 // eslint-disable-next-line
 const ProtectedRoute = ({ children }) => {
-  let token = true;
-  if (!token) {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
-
   return children;
 };
 
@@ -40,7 +39,7 @@ function AppLayout() {
       <Outlet />
     </>
   );
-};
+}
 
 const router = createBrowserRouter([
   {
@@ -48,15 +47,27 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/home",
-        element: <Editor />,
+        element: (
+          <ProtectedRoute>
+            <Editor />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "modules",
-        element: <ModuleList />,
+        element: (
+          <ProtectedRoute>
+            <ModuleList />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "login",
@@ -64,16 +75,17 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <Navigate to="/home" replace={true} />,
+        element: <Navigate to="/login" replace={true} />,
       },
     ],
-  },]);
+  },
+]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
