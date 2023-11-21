@@ -19,7 +19,7 @@ const LessonsPage = () => {
               <Card.Body>
                 <Card.Title>{lesson.title}</Card.Title>
                 <Card.Text>{lesson.description}</Card.Text>
-                    <Link to='modules'>
+                <Link to='/modules'>
                   <Button variant="primary">Go to Module List</Button>
                 </Link>
               </Card.Body>

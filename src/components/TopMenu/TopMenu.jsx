@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import PropType from "prop-types"
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import "./TopMenu.css";
 
 function TopMenu({ lessonTitle }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [currentLink, setCurrentLink] = useState("home");
-
+  const url = useLocation();
+  let currentLink = url["pathname"].slice(1);
   const toggleMenu = (name) => {
-    if (name !== "toggle") {
-      setCurrentLink(name);
-    }
     setMenuOpen(!menuOpen);
   };
 
