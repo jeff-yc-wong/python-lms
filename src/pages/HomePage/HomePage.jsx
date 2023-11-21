@@ -12,7 +12,7 @@ const HomePage = () => {
   
     return (
       <Container className="mt-5">
-        <Row>
+        <Row className="mt-5">
           <Col md={6}>
             <h1>Welcome to Python LMS</h1>
             <p>Enhance your skills with our featured courses.</p>

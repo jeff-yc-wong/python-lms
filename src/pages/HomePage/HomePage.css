@@ -2,19 +2,20 @@
     padding-top: 20px;
   }
   
-  h1, p, h2, li {
-    color: white;
-  }
-  
-  .featured-courses {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .featured-courses li {
-    margin-bottom: 10px;
-  }
-  
-  .login-buttons {
-    margin-top: 20px;
-  }
+h1, p, h2, li {
+  color: white;
+}
+
+.featured-courses {
+  list-style: none;
+  padding: 0;
+}
+
+.featured-courses li {
+  margin-bottom: 10px;
+}
+
+.login-buttons {
+  margin-top: 20px;
+}
+
