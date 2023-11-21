@@ -10,6 +10,9 @@ function TopMenu({ lessonTitle }) {
   let currentLink = url["pathname"].slice(1);
   const toggleMenu = (name) => {
     setMenuOpen(!menuOpen);
+    if (name == "logout") {
+      handleSignOut();
+    }
   };
 
   const handleSignOut = () => {
