@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 
+
 // importing the top menu
 import TopMenu from "./components/TopMenu/TopMenu";
 
@@ -19,6 +20,7 @@ import Editor from "./pages/Editor/Editor";
 import ModuleList from "./pages/ModuleList/ModuleList";
 import LoginPage from "./pages/Login/Login";
 import LessonsPage from "./pages/Lessons/Lessons";
+import HomePage from "./pages/HomePage/HomePage";
 
 // import firebase configs
 import "./service/firebase";

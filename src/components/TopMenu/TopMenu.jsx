@@ -113,7 +113,8 @@ function TopMenu({ lessonTitle }) {
                 <li className="nav-item">
                   <Link
                     to="/modules"
-                    className={`nav-link ${ currentLink === "modules" ? "active" : "" }`}
+                    className={`nav-link ${
+                       currentLink === "modules" ? "active" : "" }`}
                     style={{ fontSize: "20px", margin: "10px" }}
                     onClick={() => toggleMenu("modules")}
                   >
