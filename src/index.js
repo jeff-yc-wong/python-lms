@@ -49,7 +49,15 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: "/home",
+        path: "home",
+        element: (
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "editor",
         element: (
           <ProtectedRoute>
             <Editor />

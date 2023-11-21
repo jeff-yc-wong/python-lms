@@ -16,7 +16,9 @@ const HomePage = () => {
           <Col md={6}>
             <h1>Welcome to Python LMS</h1>
             <p>Enhance your skills with our featured courses.</p>
+            <Link to="/lessons">
             <Button variant="primary">Explore Courses</Button>
+            </Link>
           </Col>
           <Col md={6}>
             <h2>Featured Courses</h2>
@@ -25,8 +27,12 @@ const HomePage = () => {
                 <li key={course.id}>{course.title}</li>
               ))}
             </ul>
-            <Button className="mr-2" variant="outline-secondary">Log In</Button>
+      {/*
+            <Link to="/login">
+              <Button className="mr-2" variant="outline-secondary">Log In</Button>
+            </Link>
             <Button variant="outline-secondary">Sign Up</Button>
+          */}
           </Col>
         </Row>
       </Container>
