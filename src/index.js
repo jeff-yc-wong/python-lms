@@ -18,6 +18,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Editor from "./pages/Editor/Editor";
 import ModuleList from "./pages/ModuleList/ModuleList";
 import LoginPage from "./pages/Login/Login";
+import LessonsPage from "./pages/Lessons/Lessons";
 
 // import firebase configs
 import "./service/firebase";
@@ -58,6 +59,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "lessons",
+        element: (
+          <ProtectedRoute>
+            <LessonsPage />
           </ProtectedRoute>
         ),
       },

@@ -1,0 +1,22 @@
+.container {
+    margin-top: 20px;
+  }
+
+  .title {
+    color: white;
+  }
+  
+  /* Style the module title */
+  .list-group-item div {
+    font-weight: bold;
+  }
+  
+  /* Style the submodules */
+  .list-group-item ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .list-group-item li {
+    margin-left: 20px;
+  }
