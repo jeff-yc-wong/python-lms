@@ -139,7 +139,7 @@ function TopMenu({ lessonTitle }) {
                 {/* <li className="nav-item">
               <a className="nav-link" href="#" style={{ fontSize: '20px', margin: '20px' }}>Schedule</a>
             </li> */}
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link
                     className={`nav-link ${ currentLink === "settings" ? "active" : "" }`}
                     to="/"
@@ -148,18 +148,18 @@ function TopMenu({ lessonTitle }) {
                   >
                     Settings
                   </Link>
-                </li>
+                </li> */}
                 {/* <li className="nav-item">
               <a className="nav-link" href="#" style={{ fontSize: '20px', margin: '20px' }}>Notification</a>
             </li> */}
                 <li className="nav-item">
                   <Link
                     className={`nav-link ${ currentLink === "profile" ? "active" : "" }`}
-                    to="/"
+                    to="/editor"
                     style={{ fontSize: "20px", margin: "10px" }}
                     onClick={() => toggleMenu("profile")}
                   >
-                    My Profile
+                    Editor
                   </Link>
                 </li>
                 <li className="nav-item">
