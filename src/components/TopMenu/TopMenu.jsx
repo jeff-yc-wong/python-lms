@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropType from "prop-types"
 import { Link, useLocation } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
@@ -6,6 +6,7 @@ import "./TopMenu.css";
 
 function TopMenu({ lessonTitle }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const url = useLocation();
   let currentLink = url["pathname"].slice(1);
   const toggleMenu = (name) => {
@@ -28,6 +29,16 @@ function TopMenu({ lessonTitle }) {
         console.log(error.message);
       });
   }
+  
+  useEffect(() => {
+    const auth = getAuth();
+
+    let unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <>
@@ -48,6 +59,7 @@ function TopMenu({ lessonTitle }) {
           { lessonTitle !== undefined ? 
             <h5 style={{ color: "white" }}>This is Module 1</h5> : ""
           }
+          { user != null ?
           <button
             type="button"
             className="p-0 btn"
@@ -55,7 +67,7 @@ function TopMenu({ lessonTitle }) {
             style={{ color: "white", fontSize: "1.8em" }}
           >
             <span className="bi bi-box-arrow-right" />
-          </button>
+          </button> : "" }
           <div
             className={`offcanvas offcanvas-start ${
               menuOpen ? "showing" : "hiding"

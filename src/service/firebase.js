@@ -14,4 +14,4 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-initializeApp(firebaseConfig);
+await initializeApp(firebaseConfig);

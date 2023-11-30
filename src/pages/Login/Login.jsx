@@ -40,26 +40,12 @@ function LoginPage() {
     const auth = getAuth();
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
         const user = result.user;
         console.log(user);
         setUser(user);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
       })
       .catch((error) => {
         console.log(error.message);
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
       });
   };
 
@@ -74,6 +60,7 @@ function LoginPage() {
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      console.log("in auth state changed function", user);
       if (user) {
         setUser(user);
       } else {
@@ -82,7 +69,7 @@ function LoginPage() {
       setLoading(false);
     });
     return unsubscribe;
-  });
+  }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -138,10 +125,10 @@ function LoginPage() {
                   placeholder="Enter password"
                   required
                 />
-                <div class="mt-2 form-group form-check">
+                <div className="mt-2 form-group form-check">
                   <input
                     type="checkbox"
-                    class="form-check-input"
+                    className="form-check-input"
                     id="exampleCheck1"
                     onChange={togglePasswordVisibility}
                   />

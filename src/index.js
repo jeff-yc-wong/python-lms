@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
@@ -9,7 +9,6 @@ import {
   Outlet,
 } from "react-router-dom";
 import { getAuth } from "firebase/auth";
-
 
 // importing the top menu
 import TopMenu from "./components/TopMenu/TopMenu";
@@ -26,14 +25,31 @@ import HomePage from "./pages/HomePage/HomePage";
 import "./service/firebase";
 
 // eslint-disable-next-line
-const ProtectedRoute = ({ children }) => {
-  const auth = getAuth();
-  const user = auth.currentUser;
-  if (!user) {
-    return <Navigate to="/login" replace />;
+function ProtectedRoute({ children }) {
+  const [user, setUser] = useState(undefined);
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    let unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  if (user === undefined)  {
+    // implement a loading screen
+    return <p>Loading...</p>
   }
-  return children;
-};
+  else if (user === null) {
+    return <Navigate to="/login" />;
+  }
+  else {
+    return children
+  };
+  // return children;
+}
 
 function AppLayout() {
   return (
@@ -46,10 +62,11 @@ function AppLayout() {
 
 const router = createBrowserRouter([
   {
+    path: "/",
     element: <AppLayout />,
     children: [
       {
-        path: "home",
+        path: "/home",
         element: (
           <ProtectedRoute>
             <HomePage />
@@ -57,7 +74,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "editor",
+        path: "/editor",
         element: (
           <ProtectedRoute>
             <Editor />
@@ -65,7 +82,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "dashboard",
+        path: "/dashboard",
         element: (
           <ProtectedRoute>
             <Dashboard />
@@ -73,7 +90,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "lessons",
+        path: "/lessons",
         element: (
           <ProtectedRoute>
             <LessonsPage />
@@ -81,7 +98,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "modules",
+        path: "/modules",
         element: (
           <ProtectedRoute>
             <ModuleList />
@@ -89,12 +106,12 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "login",
+        path: "/login",
         element: <LoginPage />,
       },
       {
-        path: "*",
-        element: <Navigate to="/login" replace={true} />,
+        path: "/",
+        element: <LoginPage />,
       },
     ],
   },
