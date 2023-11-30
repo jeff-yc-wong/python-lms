@@ -33,7 +33,7 @@ const Dashboard = () => {
     <div className="container mt-5">
       <h1 className="title">Student Progress Dashboard</h1>
       <div>
-        <h2>Module Progress</h2>
+        {/* <h2>Module Progress</h2> */}
         {moduleProgress.map((module, index) => (
           <ProgressBar
             key={index}
