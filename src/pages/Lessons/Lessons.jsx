@@ -4,8 +4,8 @@ import { Card, Button, Row, Col } from 'react-bootstrap';
 
 const LessonsPage = () => {
   const lessons = [
-    { id: 1, title: 'Lesson 1', description: 'Introduction to Python' },
-    { id: 2, title: 'Lesson 2', description: 'Control and Flow' },
+    { id: 1, title: 'Python 101', description: 'Introduction to Python' },
+    { id: 2, title: 'Python 102', description: 'Control and Flow' },
     // Add more lessons as needed
   ];
 
@@ -18,7 +18,7 @@ const LessonsPage = () => {
             <Card>
               <Card.Body>
                 <Card.Title>{lesson.title}</Card.Title>
-                <Card.Text>{lesson.description}</Card.Text>
+                <Card.Text style={{color: "grey"}}>{lesson.description}</Card.Text>
                 <Link to='/modules'>
                   <Button variant="primary">Go to Module List</Button>
                 </Link>
