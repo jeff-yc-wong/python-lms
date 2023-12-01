@@ -22,10 +22,10 @@ const ProgressBar = ({ moduleNumber, label, progress }) => {
 
 const Dashboard = () => {
   const moduleProgress = [
-    { moduleNumber: 1, module: 'Module 1', progress: 80 },
-    { moduleNumber: 2, module: 'Module 2', progress: 60 },
-    { moduleNumber: 3, module: 'Module 3', progress: 90 },
-    { moduleNumber: 4, module: 'Module 4', progress: 75 },
+    { moduleNumber: 1, module: 'Intro to Python', progress: 100 },
+    { moduleNumber: 2, module: 'Control and Flow', progress: 80 },
+    { moduleNumber: 3, module: 'Functions', progress: 60 },
+    { moduleNumber: 4, module: 'Arrays', progress: 40 },
     // Replace with actual student progress data
   ];
 
