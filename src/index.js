@@ -20,6 +20,7 @@ import ModuleList from "./pages/ModuleList/ModuleList";
 import LoginPage from "./pages/Login/Login";
 import LessonsPage from "./pages/Lessons/Lessons";
 import HomePage from "./pages/HomePage/HomePage";
+import UploadLesson from "./pages/UploadLesson/UploadLesson";
 
 // import firebase configs
 import "./service/firebase";
@@ -78,6 +79,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Editor />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/upload",
+        element: (
+          <ProtectedRoute>
+            <UploadLesson />
           </ProtectedRoute>
         ),
       },
