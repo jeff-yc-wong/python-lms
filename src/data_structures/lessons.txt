@@ -1,0 +1,60 @@
+// Lessons -> Modules -> Content
+
+
+Lesson Collection
+
+Lesson Object
+{
+    "id": int
+    "title": String (unique among lessons)
+    "description": String
+    "modules": collection (arrays of modules object)
+}
+
+Modules Objects
+{
+    "id": int
+    "title": String (unique among modules)
+    "submodules": collection (array of submodules)
+}
+
+Submodules Object
+{
+    "id": int
+    "title": String (unique among submodules)
+    "subsubmodule": collection (arrays of subsubmodule)
+}
+
+Subsubmodule Object
+{
+    "id": int
+    "title": String (unique among subsubmodules)
+    "content": String (markdown)
+}
+
+
+
+
+
+CodeEditor Collection
+student uid as keys that leads to a collection of code session? maybe?
+
+CodeSession Object
+
+{
+    "session_id": int
+    "user_id": int (uid of students)
+    "subsubmodule_id": int
+    "code": String
+    "output": String
+    "canvas": String (pixels encoded as String)
+    "last_updated": DateTime
+}
+
+
+User Collection
+{
+    "completed": array[int] (subsubmodule_ids)
+    "profile_picture": int (a index from a list of options)
+    "display_name": String (grab from Goolge account, but can be edited)
+}
