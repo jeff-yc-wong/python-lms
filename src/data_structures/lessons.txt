@@ -22,18 +22,15 @@ Submodules Object
 {
     "id": int
     "title": String (unique among submodules)
-    "subsubmodule": collection (arrays of subsubmodule)
+    "exercise": collection (arrays of excersie)
 }
 
-Subsubmodule Object
+Exercise Object
 {
     "id": int
-    "title": String (unique among subsubmodules)
+    "title": String (unique among exercise)
     "content": String (markdown)
 }
-
-
-
 
 
 CodeEditor Collection
@@ -44,7 +41,7 @@ CodeSession Object
 {
     "session_id": int
     "user_id": int (uid of students)
-    "subsubmodule_id": int
+    "exercise_id": int
     "code": String
     "output": String
     "canvas": String (pixels encoded as String)
@@ -58,3 +55,9 @@ User Collection
     "profile_picture": int (a index from a list of options)
     "display_name": String (grab from Goolge account, but can be edited)
 }
+
+
+
+
+URL for lessons: /lesson/python101
+URL for exercise: /editor/<subsubmodule_id>

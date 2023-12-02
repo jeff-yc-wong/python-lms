@@ -24,4 +24,5 @@
   .triangle {
     margin-left: 5px; /* Add some space between the title and the triangle */
     font-size: 12px; /* Adjust the size of the triangle */
+    vertical-align: text-top; /* Align the triangle with the text */
   }
