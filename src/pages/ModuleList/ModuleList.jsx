@@ -51,8 +51,8 @@ const ModulesList = () => {
   return (
     <div className="container mt-5">
       <h1 className="title">Modules List</h1>
-      <ul className="list-group">
-        {modules.map((module) => (
+      {modules.map((module) => (
+        <ul className="mb-3 list-group">
           <li key={module.id} className="list-group-item">
             <div
               style={{ cursor: "pointer" }}
@@ -96,8 +96,8 @@ const ModulesList = () => {
               </ul>
             )}
           </li>
-        ))}
-      </ul>
+        </ul>
+      ))}
     </div>
   );
 };

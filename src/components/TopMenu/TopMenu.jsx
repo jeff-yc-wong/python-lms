@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import PropType from "prop-types"
+import React, { useState, useEffect, useRef } from "react";
+import PropType from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import "./TopMenu.css";
@@ -7,12 +7,28 @@ import "./TopMenu.css";
 function TopMenu({ lessonTitle }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const wrapperRef = useRef(null);
+  let eventKey;
   const url = useLocation();
+
   let currentLink = url["pathname"].slice(1);
   const toggleMenu = (name) => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && wrapperRef.current.contains(event.target) && event.target.tagName == "A") {
+        document.removeEventListener("mousedown", handleClickOutside);
+      }
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setMenuOpen(false);
+        document.removeEventListener("mousedown", handleClickOutside);
+      }
+    }
+    
     setMenuOpen(!menuOpen);
     if (name == "logout") {
       handleSignOut();
+    } else if (name == "toggle") {
+      // Bind the event listener
+      document.addEventListener("mousedown", handleClickOutside);
     }
   };
 
@@ -28,8 +44,8 @@ function TopMenu({ lessonTitle }) {
         // An error happened.
         console.log(error.message);
       });
-  }
-  
+  };
+
   useEffect(() => {
     const auth = getAuth();
 
@@ -56,19 +72,25 @@ function TopMenu({ lessonTitle }) {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          { lessonTitle !== undefined ? 
-            <h5 style={{ color: "white" }}>This is Module 1</h5> : ""
-          }
-          { user != null ?
-          <button
-            type="button"
-            className="p-0 btn"
-            onClick={handleSignOut}
-            style={{ color: "white", fontSize: "1.8em" }}
-          >
-            <span className="bi bi-box-arrow-right" />
-          </button> : "" }
+          {lessonTitle !== undefined ? (
+            <h5 style={{ color: "white" }}>This is Module 1</h5>
+          ) : (
+            ""
+          )}
+          {user != null ? (
+            <button
+              type="button"
+              className="p-0 btn"
+              onClick={handleSignOut}
+              style={{ color: "white", fontSize: "1.8em" }}
+            >
+              <span className="bi bi-box-arrow-right" />
+            </button>
+          ) : (
+            ""
+          )}
           <div
+            ref={wrapperRef}
             className={`offcanvas offcanvas-start ${
               menuOpen ? "showing" : "hiding"
             } text-bg-dark`}
@@ -129,7 +151,8 @@ function TopMenu({ lessonTitle }) {
                   <Link
                     to="/modules"
                     className={`nav-link ${
-                       currentLink === "modules" ? "active" : "" }`}
+                      currentLink === "modules" ? "active" : ""
+                    }`}
                     style={{ fontSize: "20px", margin: "10px" }}
                     onClick={() => toggleMenu("modules")}
                   >
@@ -154,7 +177,9 @@ function TopMenu({ lessonTitle }) {
             </li> */}
                 <li className="nav-item">
                   <Link
-                    className={`nav-link ${ currentLink === "profile" ? "active" : "" }`}
+                    className={`nav-link ${
+                      currentLink === "profile" ? "active" : ""
+                    }`}
                     to="/editor"
                     style={{ fontSize: "20px", margin: "10px" }}
                     onClick={() => toggleMenu("profile")}
@@ -164,7 +189,9 @@ function TopMenu({ lessonTitle }) {
                 </li>
                 <li className="nav-item">
                   <Link
-                    className={`nav-link ${ currentLink === "logout" ? "active" : "" }`}
+                    className={`nav-link ${
+                      currentLink === "logout" ? "active" : ""
+                    }`}
                     to="/"
                     style={{ fontSize: "20px", margin: "10px" }}
                     onClick={() => toggleMenu("logout")}
@@ -186,6 +213,6 @@ function TopMenu({ lessonTitle }) {
 
 TopMenu.propTypes = {
   lessonTitle: PropType.string,
-}
+};
 
 export default TopMenu;
