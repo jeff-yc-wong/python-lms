@@ -1,3 +1,18 @@
 .markdown-body {
-  font-size: 16px;
+  font-size: 0.6em;
+}
+
+.instruction-divider {
+  font-family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Noto Sans',
+  'Helvetica', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  background-color: #353B45;
+}
+
+code {
+  color: inherit;
+}
+
+#lesson {
+  overflow-x: hidden;
+  overflow-y: auto;
 }

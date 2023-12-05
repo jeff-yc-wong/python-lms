@@ -1,29 +1,22 @@
-#editor {
-  margin-left: 30px;
-}
-
-#yourcode {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-  width: 95%;
-  height: 45vh;
-  min-height: 400px;
-  padding: 10px;
-  font-size: small;
-}
-
 #mycanvas {
   background-color: lightgrey;
   width: 400px;
   height: 400px;
 }
 #output {
-  display: inline-block;
-  background-color: white;
+  display: block;
+  /* background-color: black; */
   color: black;
   text-align: left;
-  height: 15vh;
-  width: 100%;
-  margin: 10px;
+  width: inherit;
   font-size: small;
+  padding: 10px 0px 0px 10px;
+  overflow-y: scroll;
+  height: 150px;
+  /* max-height: 20vh; */
+}
+
+#codeeditor {
+  max-height: 93vh;
+  overflow: scroll;
 }

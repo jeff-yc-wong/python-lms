@@ -29,7 +29,9 @@ Exercise Object
 {
     "id": int
     "title": String (unique among exercise)
-    "content": String (markdown)
+    "overview": String (markdown)
+    "instruction": String (markdown)
+    "hints": Array of Strings (markdown)
 }
 
 

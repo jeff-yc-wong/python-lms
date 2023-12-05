@@ -1,22 +1,22 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-twilight";
+import "ace-builds/src-noconflict/ext-language_tools";
 import "./CodeEditor.css";
 
 function outf(text) {
   var mypre = document.getElementById("output");
   mypre.style.color = "black";
   mypre.style.fontWeight = "normal";
-  mypre.innerHTML = mypre.innerHTML + text;
+  mypre.innerText = mypre.innerText + text;
 }
 
 function erroutf(text) {
   var mypre = document.getElementById("output");
   mypre.style.color = "red";
   mypre.style.fontWeight = "bold";
-  mypre.innerHTML = mypre.innerHTML + text;
-  mypre.innerHTML = mypre.innerHTML + "\n";
+  mypre.innerText = mypre.innerText + text;
 }
 function builtinRead(x) {
   if (
@@ -29,7 +29,6 @@ function builtinRead(x) {
 
 function runit(code) {
   var prog = code;
-  console.log(prog);
   var mypre = document.getElementById("output");
   mypre.innerHTML = "";
   window.Sk.pre = "output";
@@ -46,10 +45,11 @@ function runit(code) {
     return window.Sk.importMainWithBody("<stdin>", false, prog, true);
   });
   myPromise.then(
-    function (mod) {
-      //   console.log("success");
+    function (debug) {
+      // console.log("success");
     },
     function (err) {
+      console.log("error");
       console.log(err.toString());
       erroutf(err);
     }
@@ -60,62 +60,105 @@ function clearOutput() {
   document.getElementById("output").innerHTML = "";
 }
 
-function CodeEditor() {
-  var defaultCode = `import turtle
-  
+function CodeEditor({ innerRef }) {
+  var defaultCode =
+`import turtle
+
 t = turtle.Turtle()
-  
+
 for c in ['red', 'green', 'yellow', 'blue']:
-  t.color(c)
-  t.forward(75)
-  t.left(90)
-  
+    t.color(c)
+    t.forward(75)
+    t.left(90)
+    
+    
 print("Hello World")`;
 
   const [code, setCode] = useState(defaultCode);
+  const [showCanvas, setShowCanvas] = useState(false);
+  const canvasRef = useRef(null);
+
+  const initialState = showCanvas.valueOf();
 
   const handleCodeChange = (e) => {
     setCode(e);
   };
 
-  return (
-    <div id="codeeditor" className="m-0 p-0 container">
-      <div className="row justify-content-center">
-        <div className="col">
-          <h3>Code</h3>
-          <form>
-            <AceEditor
-              mode="python"
-              theme="twilight"
-              onChange={handleCodeChange}
-              defaultValue={defaultCode}
-            />
-            <br />
-            <button
-              className="btn btn-success"
-              type="button"
-              onClick={() => runit(code)}
-            >
-              Run
-            </button>
-          </form>
-        </div>
+  const editor_style = {
+    fontFamily:
+      'source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace',
+    width: "100%",
+    height: "45vh",
+    minHeight: "400px",
+    fontSize: "small",
+    minWidth: "400px",
+  };
+  
+  const toggleCanvas = () => {
+    setShowCanvas(!showCanvas);
+  }
 
+  useEffect(() => { 
+    let canvas = canvasRef.current;
+    if (initialState) {
+      canvas.classList.add("show");
+    }
+  }, [initialState]);
+
+  return (
+    <div ref={innerRef} id="codeeditor" className="p-4">
+      <div className="row">
         <div className="col">
-          <div className="row justify-content-center">
-            <h3>Canvas</h3>
-            <div id="mycanvas"></div>
+          <h3 className="float-start">Code</h3>
+          <AceEditor
+            mode="python"
+            theme="twilight"
+            onChange={handleCodeChange}
+            defaultValue={defaultCode}
+            style={editor_style}
+            showPrintMargin={false}
+            scrollMargin={[10, 10, 0, 0]}
+            enableLiveAutocompletion={true}
+          />
+          <button
+            className="mt-3 btn btn-success float-start"
+            type="button"
+            onClick={() => runit(code)}
+          >
+            Run
+          </button>
+          <div
+            className="mt-3 form-check form-switch float-end fs-5"
+          >
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              checked={showCanvas}
+              onChange={toggleCanvas}
+              id="flexSwitchCheckDefault"
+              data-bs-toggle="collapse"
+              data-bs-target="#canvas-div"
+            />
+            <label
+              className="form-check-label fs-6 fw-bold"
+              htmlFor="flexSwitchCheckDefault"
+            >
+              Show Canvas
+            </label>
           </div>
+        </div>
+        <div ref={canvasRef} id="canvas-div" className={`col-md-auto collapse-horizontal collapse`}>
+          <h3 className="text-start">Canvas</h3>
+          <div id="mycanvas"></div>
         </div>
       </div>
 
-      <div className="mt-3 row justify-content-center">
+      <div className="mt-3 row">
         <div className="col">
-          <h3>Output</h3>
-          <pre id="output"></pre>
-          <br />
+          <pre id="output" className="bg-dark text-bg-dark" />
           <button
-            className="btn btn-success"
+            className="pt-1 btn btn-success float-end"
             type="button"
             onClick={clearOutput}
           >
