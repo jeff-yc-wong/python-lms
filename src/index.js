@@ -13,18 +13,19 @@ import { getAuth } from "firebase/auth";
 // importing the top menu
 import TopMenu from "./components/TopMenu/TopMenu";
 
-// importing the different pages
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Editor from "./pages/Editor/Editor";
-import ModuleList from "./pages/ModuleList/ModuleList";
-import LoginPage from "./pages/Login/Login";
-import LessonsPage from "./pages/Lessons/Lessons";
-import HomePage from "./pages/HomePage/HomePage";
-import UploadLesson from "./pages/UploadLesson/UploadLesson";
-import ErrorPage from "./pages/ErrorPage/ErrorPage";
-
 // import firebase configs
 import "./service/firebase";
+
+// importing the different pages
+const Dashboard = React.lazy(() => import("./pages/Dashboard/Dashboard"));
+const Editor = React.lazy(() => import("./pages/Editor/Editor"));
+const ModuleList = React.lazy(() => import("./pages/ModuleList/ModuleList"));
+const LoginPage = React.lazy(() => import("./pages/Login/Login"));
+const LessonsPage = React.lazy(() => import("./pages/Lessons/Lessons"));
+const HomePage = React.lazy(() => import("./pages/HomePage/HomePage"));
+const UploadLesson = React.lazy(() => import("./pages/UploadLesson/UploadLesson"));
+const ErrorPage = React.lazy(() => import("./pages/ErrorPage/ErrorPage"));
+
 
 // eslint-disable-next-line
 function ProtectedRoute({ children }) {

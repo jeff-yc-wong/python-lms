@@ -15,7 +15,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
   const passwordRef = useRef(null);
-  const [userType, setUserType] = useState("");
+  // const [userType, setUserType] = useState("");
 
   const handleEmailLogin = (e) => {
     const auth = getAuth();
