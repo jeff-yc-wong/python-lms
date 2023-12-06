@@ -43,7 +43,7 @@ return (
       <Markdown
         children={overview}
         className="ps-4 pe-4 pb-4 markdown-body"
-        // remarkPlugins={}
+        remarkPlugins={remarkGfm}
         urlTransform={(url) =>
           url.startsWith("data") ? url : defaultUrlTransform(url)
         }
@@ -100,9 +100,9 @@ return (
         }}
       />
 
-      {
+      {/* {
         //TODO: Hint Section
-      }
+      } */}
     </div>
   );
 }

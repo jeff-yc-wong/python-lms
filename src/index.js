@@ -12,6 +12,7 @@ import { getAuth } from "firebase/auth";
 
 // importing the top menu
 import TopMenu from "./components/TopMenu/TopMenu";
+import Loading from "./pages/Loading/Loading";
 
 // import firebase configs
 import "./service/firebase";
@@ -25,7 +26,6 @@ const LessonsPage = React.lazy(() => import("./pages/Lessons/Lessons"));
 const HomePage = React.lazy(() => import("./pages/HomePage/HomePage"));
 const UploadLesson = React.lazy(() => import("./pages/UploadLesson/UploadLesson"));
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage/ErrorPage"));
-
 
 // eslint-disable-next-line
 function ProtectedRoute({ children }) {
@@ -151,7 +151,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <React.Suspense fallback={<Loading />}>
+      <RouterProvider router={router} />
+    </React.Suspense>
   </React.StrictMode>
 );
 
