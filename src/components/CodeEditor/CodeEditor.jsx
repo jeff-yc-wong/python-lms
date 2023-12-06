@@ -60,8 +60,9 @@ function clearOutput() {
   document.getElementById("output").innerHTML = "";
 }
 
-function CodeEditor({ innerRef }) {
-  var defaultCode =
+function CodeEditor({ innerRef, defaultCode }) {
+  if (defaultCode === undefined || defaultCode === null || defaultCode === "") {
+  defaultCode =
 `import turtle
 
 t = turtle.Turtle()
@@ -73,6 +74,7 @@ for c in ['red', 'green', 'yellow', 'blue']:
     
     
 print("Hello World")`;
+  }
 
   const [code, setCode] = useState(defaultCode);
   const [showCanvas, setShowCanvas] = useState(false);

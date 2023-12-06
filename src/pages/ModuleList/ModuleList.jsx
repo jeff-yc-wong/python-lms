@@ -1,137 +1,237 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate, useLocation } from "react-router-dom";
+import db from "../../service/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import Loading from "../Loading/Loading";
+
 import "./ModuleList.css";
 
 const ModulesList = () => {
   const [expandedModules, setExpandedModules] = useState([]);
+  const [modules, setModules] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [moduleCards, setModuleCards] = useState([]);
+  const url = useLocation();
 
-  const modules = [
-    {
-      id: 1,
-      title: "1: Hello World",
-      submodules: [
-        {
-          id: 101,
-          title: "1.1: Welcome",
-          exercises: [
-            { id: 1001, title: "1.1.1: Hello World" },
-            { id: 1002, title: "1.1.2: Variables" },
-          ],
-        },
-        {
-          id: 102,
-          title: "1.2: Comments",
-          exercises: [
-            { id: 1003, title: "1.2.1: Output" },
-            { id: 1004, title: "1.2.2: Input" },
-          ],
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "2: Control Flow",
-      exercises: [
-        { id: 201, title: "2.1: Conditional Math" },
-        { id: 202, title: "2.2: If/Else Statement" },
-      ],
-    },
-    // Add more modules and submodules as needed
-  ];
+  useEffect(() => {
+    setIsLoading(true);
 
-  const handleModuleClick = (moduleId) => {
-    setExpandedModules((prevState) => {
-      if (prevState && prevState.includes(moduleId)) {
-        return prevState.filter((id) => id !== moduleId);
+    // Error Checking
+    if (url.state != null) {
+      if ("lesson_id" in url["state"]) {
+        var lesson_id = url.state.lesson_id;
       } else {
-        return [...(prevState || []), moduleId];
+        setHasError(true);
+        return () => {};
       }
-    });
-  };
+    } else {
+      setHasError(true);
+      return () => {};
+    }
 
-  return (
-    <div className="container mt-5">
-      <h1 className="title">Modules List</h1>
-      {
-        // Checks if there are modules then create a list group for each module
-        modules.length !== 0 &&
-          modules.map((module) => (
-            <ul key={`${module.id}_main_list`} className="mb-3  list-group">
-              <li key={module.id} className="list-group-item">
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleModuleClick(module.id)}
-                >
-                  {module.title}
-                  <span className="triangle">
-                    {expandedModules.includes(module.id) ? "▼" : "▶"}
-                  </span>
-                </div>
+    const fetchData = async () => {
+      let q = query(
+        collection(db, "lessons", lesson_id, "modules"),
+        orderBy("order")
+      );
+      const snapshot = await getDocs(q);
+      const output = await Promise.all(
+        snapshot.docs.map(async (doc) => {
+          // Inside each module
 
-                {
-                  // Checks if the module is expanded
-                  expandedModules.includes(module.id) && (
-                    <ul key={`${module.id}_sub_list`} className="list-group mt-2">
-                      {
-                        // Checks if there are submodules then create a list group for each submodule
-                        "submodules" in module &&
-                          module.submodules.map((submodule) => (
-                            <li key={submodule.id} className="list-group-item">
-                              <div
-                                style={{ cursor: "pointer" }}
-                                onClick={() => handleModuleClick(submodule.id)}
-                              >
-                                {submodule.title}
-                                {"exercises" in submodule && (
-                                  <span className="triangle">
-                                    {expandedModules.includes(submodule.id)
-                                      ? "▼"
-                                      : "▶"}
-                                  </span>
-                                )}
-                              </div>
-                              {
-                                // Checks if the submodule is expanded and then create list-group items for each exercise
-                                expandedModules.includes(submodule.id) &&
-                                  "exercises" in submodule && (
-                                    <ul className="list-group mt-2">
-                                      {
-                                        // Maps through the exercises to create list-group items for each exercise
-                                        submodule.exercises.map(
-                                          (subsubmodule) => (
-                                            <li
-                                              key={subsubmodule.id}
-                                              className="list-group-item"
-                                            >
-                                              {subsubmodule.title}
-                                            </li>
-                                          )
-                                        )
-                                      }
-                                    </ul>
-                                  )
-                              }
-                            </li>
-                          ))
-                      }
+          //Check if there are submodules
+          q = query(
+            collection(
+              db,
+              "lessons",
+              lesson_id,
+              "modules",
+              doc.id,
+              "submodules"
+            ),
+            orderBy("order")
+          );
+          let submodules = await getDocs(q);
 
-                      {
-                        // Checks if there are exercises then create a list group for each exercise
-                        "exercises" in module &&
-                          module.exercises.map((exercise) => (
-                            <li key={exercise.id} className="list-group-item">
-                              {exercise.title}
-                            </li>
-                          ))
-                      }
-                    </ul>
-                  )
-                }
-              </li>
-            </ul>
-          ))
-      }
-    </div>
-  );
+          if (submodules.docs.length !== 0) {
+            submodules = await Promise.all(
+              submodules.docs.map(async (submodule) => {
+                // inside submodules
+                q = query(
+                  collection(
+                    db,
+                    "lessons",
+                    lesson_id,
+                    "modules",
+                    doc.id,
+                    "submodules",
+                    submodule.id,
+                    "exercises"
+                  ),
+                  orderBy("order")
+                );
+                let exercises = await getDocs(q);
+
+                exercises = exercises.docs.map((exercise) => {
+                  return { id: exercise.id, ...exercise.data() };
+                });
+
+                return {
+                  id: submodule.id,
+                  ...submodule.data(),
+                  exercises: exercises,
+                };
+              })
+            );
+
+            return { id: doc.id, ...doc.data(), submodules: submodules };
+          }
+          q = query(
+            collection(
+              db,
+              "lessons",
+              lesson_id,
+              "modules",
+              doc.id,
+              "exercises"
+            ),
+            orderBy("order")
+          );
+          let exercises = await getDocs(q);
+          exercises = exercises.docs.map((exercise) => {
+            return { id: exercise.id, ...exercise.data() };
+          });
+
+          return { id: doc.id, ...doc.data(), exercises: exercises };
+        })
+      );
+      // console.log(output);
+      setModules(output);
+    };
+
+    fetchData();
+  }, [url]);
+
+  useEffect(() => {
+    const handleModuleClick = (moduleId) => {
+      setExpandedModules((prevState) => {
+        if (prevState && prevState.includes(moduleId)) {
+          return prevState.filter((id) => id !== moduleId);
+        } else {
+          return [...(prevState || []), moduleId];
+        }
+      });
+    };
+
+    if (modules.length !== 0) {
+      const module_cards = modules.map((module, index) => (
+        <ul key={`${module.id}_main_list`} className="mb-3  list-group">
+          <li key={module.id} className="list-group-item">
+            <div
+              style={{ cursor: "pointer" }}
+              onClick={() => handleModuleClick(module.id)}
+            >
+              {`${index + 1}. ${module.title}`}
+              <span className="triangle">
+                {expandedModules.includes(module.id) ? "▼" : "▶"}
+              </span>
+            </div>
+
+            {
+              // Checks if the module is expanded
+              expandedModules.includes(module.id) && (
+                <ul key={`${module.id}_sub_list`} className="list-group mt-2">
+                  {
+                    // Checks if there are submodules then create a list group for each submodule
+                    "submodules" in module &&
+                      module.submodules.map((submodule, subindex) => (
+                        <li key={submodule.id} className="list-group-item">
+                          <div
+                            style={{ cursor: "pointer" }}
+                            onClick={() => handleModuleClick(submodule.id)}
+                          >
+                            {`${index + 1}.${subindex + 1} ${submodule.title}`}
+                            {"exercises" in submodule && (
+                              <span className="triangle">
+                                {expandedModules.includes(submodule.id)
+                                  ? "▼"
+                                  : "▶"}
+                              </span>
+                            )}
+                          </div>
+                          {
+                            // Checks if the submodule is expanded and then create list-group items for each exercise
+                            expandedModules.includes(submodule.id) &&
+                              "exercises" in submodule && (
+                                <ul className="list-group mt-2">
+                                  {
+                                    // Maps through the exercises to create list-group items for each exercise
+                                    submodule.exercises.map(
+                                      (exercise, exindex) => (
+                                        <li
+                                          key={exercise.id}
+                                          className="list-group-item"
+                                        >
+                                          <Link
+                                            to="/editor"
+                                            state={{ exercise_id: exercise.id, module_path: [module.title, submodule.title] }}
+                                            className="text-dark"
+                                          >
+                                            {`${index + 1}.${subindex + 1}.${
+                                              exindex + 1
+                                            } ${exercise.title}`}
+                                          </Link>
+                                        </li>
+                                      )
+                                    )
+                                  }
+                                </ul>
+                              )
+                          }
+                        </li>
+                      ))
+                  }
+
+                  {
+                    // Checks if there are exercises then create a list group for each exercise
+                    "exercises" in module &&
+                      module.exercises.map((exercise, exindex) => (
+                        <li key={exercise.id} className="list-group-item">
+                          <Link
+                            to="/editor"
+                            className="text-dark"
+                            state={{ exercise_id: exercise.id, module_path: [module.title] }}
+                          >
+                            {`${index + 1}.${exindex + 1} ${exercise.title}`}
+                          </Link>
+                        </li>
+                      ))
+                  }
+                </ul>
+              )
+            }
+          </li>
+        </ul>
+      ));
+      setModuleCards(module_cards);
+      setIsLoading(false);
+    }
+  }, [modules, expandedModules]);
+
+  if (hasError) {
+    return <Navigate to="/errors" />;
+  }
+  if (!isLoading) {
+    return (
+      <div className="container mt-5">
+        <h1 className="title">Modules List</h1>
+        {moduleCards}
+      </div>
+    );
+  } else {
+    return <Loading />;
+  }
 };
 
 export default ModulesList;

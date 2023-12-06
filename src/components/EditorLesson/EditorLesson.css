@@ -16,3 +16,8 @@ code {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+.module-path:hover{
+  color: lightblue;
+  text-decoration: underline;
+}

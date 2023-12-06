@@ -8,13 +8,16 @@ function TopMenu({ lessonTitle }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
   const wrapperRef = useRef(null);
-  let eventKey;
   const url = useLocation();
 
   let currentLink = url["pathname"].slice(1);
   const toggleMenu = (name) => {
     function handleClickOutside(event) {
-      if (wrapperRef.current && wrapperRef.current.contains(event.target) && event.target.tagName == "A") {
+      if (
+        wrapperRef.current &&
+        wrapperRef.current.contains(event.target) &&
+        event.target.tagName === "A"
+      ) {
         document.removeEventListener("mousedown", handleClickOutside);
       }
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -22,11 +25,11 @@ function TopMenu({ lessonTitle }) {
         document.removeEventListener("mousedown", handleClickOutside);
       }
     }
-    
+
     setMenuOpen(!menuOpen);
-    if (name == "logout") {
+    if (name === "logout") {
       handleSignOut();
-    } else if (name == "toggle") {
+    } else if (name === "toggle") {
       // Bind the event listener
       document.addEventListener("mousedown", handleClickOutside);
     }
@@ -123,7 +126,7 @@ function TopMenu({ lessonTitle }) {
                     Home
                   </Link>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link
                     to="/dashboard"
                     className={`nav-link ${
@@ -134,7 +137,7 @@ function TopMenu({ lessonTitle }) {
                   >
                     Dashboard
                   </Link>
-                </li>
+                </li> */}
                 <li className="nav-item">
                   <Link
                     to="/lessons"
@@ -147,7 +150,7 @@ function TopMenu({ lessonTitle }) {
                     Lessons
                   </Link>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link
                     to="/modules"
                     className={`nav-link ${
@@ -158,7 +161,7 @@ function TopMenu({ lessonTitle }) {
                   >
                     Modules
                   </Link>
-                </li>
+                </li> */}
                 {/* <li className="nav-item">
               <a className="nav-link" href="#" style={{ fontSize: '20px', margin: '20px' }}>Schedule</a>
             </li> */}

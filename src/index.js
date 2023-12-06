@@ -21,6 +21,7 @@ import LoginPage from "./pages/Login/Login";
 import LessonsPage from "./pages/Lessons/Lessons";
 import HomePage from "./pages/HomePage/HomePage";
 import UploadLesson from "./pages/UploadLesson/UploadLesson";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 // import firebase configs
 import "./service/firebase";
@@ -39,16 +40,24 @@ function ProtectedRoute({ children }) {
     return unsubscribe;
   }, []);
 
-  if (user === undefined)  {
+  if (user === undefined) {
     // implement a loading screen
-    return <p>Loading...</p>
-  }
-  else if (user === null) {
+    return (
+      <div className="loading container-fluid">
+        <div className="row h-100 justify-content-center align-items-center ">
+          <div className="col d-flex justify-content-center">
+            <div className="spinner-border text-light" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  } else if (user === null) {
     return <Navigate to="/login" />;
+  } else {
+    return children;
   }
-  else {
-    return children
-  };
   // return children;
 }
 
@@ -107,6 +116,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/lessons/:lessonId",
+        element: (
+          <ProtectedRoute>
+            <ModuleList />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "/modules",
         element: (
           <ProtectedRoute>
@@ -117,6 +134,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
+      },
+      {
+        path: "/errors",
+        element: <ErrorPage />,
       },
       {
         path: "/",

@@ -1,35 +1,70 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Card, Button, Row, Col } from 'react-bootstrap';
-import './Lessons.css';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import "./Lessons.css";
+import { collection, onSnapshot } from "firebase/firestore";
+import db from "../../service/firebase";
+import Loading from "../Loading/Loading";
 
 const LessonsPage = () => {
-  const lessons = [
-    { id: 1, title: 'Python 101', description: 'Introduction to Python' },
-    { id: 2, title: 'Python 102', description: 'Control and Flow' },
-    // Add more lessons as needed
-  ];
+  const [lessons, setLessons] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [lesson_cards, setLessonCards] = useState([]); // [lesson_card, lesson_card, ...
 
-  return (
-    <div className="container mt-5">
-      <h1 className="title">Lessons Page</h1>
-      <Row xs={1} md={2} lg={3} xl={4}>
-        {lessons.map(lesson => (
-          <Col key={lesson.id} className="mb-4">
-            <Card>
-              <Card.Body>
-                <Card.Title>{lesson.title}</Card.Title>
-                <Card.Text style={{color: "grey"}}>{lesson.description}</Card.Text>
-                <Link to='/modules'>
-                  <Button variant="primary">Go to Module List</Button>
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-    </div>
-  );
-}
+  useEffect(() => {
+    const difficultyOrder = {
+      Beginner: 1,
+      Intermediate: 2,
+      Advanced: 3,
+    };
+
+    onSnapshot(collection(db, "lessons"), (snapshot) => {
+      setIsLoading(true);
+      const output = snapshot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
+
+      output.sort((a, b) => {
+        return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+      });
+
+      setLessons(output);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (lessons.length !== 0) {
+      const lesson_cards = lessons.map((lesson) => (
+        <div key={lesson.id} className="col-3 d-flex">
+          <div className="card lesson-card">
+            <div className="card-body d-flex flex-column ">
+              <h5 className="card-title">{lesson.title}</h5>
+              <p className="truncate-text flex-fill">{lesson.description}</p>
+              <Link
+                to="/modules"
+                state={{ lesson_id: lesson.id }}
+                className="mt-auto"
+              >
+                <div className="btn btn-secondary">Start Lesson</div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      ));
+      setLessonCards(lesson_cards);
+      setIsLoading(false);
+    }
+  }, [lessons]);
+
+  if (!isLoading) {
+    return (
+      <div className="container mt-5">
+        <h1 className="title">Lessons Page</h1>
+        <div className="row">{lesson_cards}</div>
+      </div>
+    );
+  } else {
+    return <Loading />;
+  }
+};
 
 export default LessonsPage;

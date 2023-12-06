@@ -3,36 +3,46 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import "./EditorLesson.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // If we want to render HTML in our lesson we can install and import the following:
 // import rehypeRaw from 'rehype-raw'
 //
-function EditorLesson({ innerRef }) {
-  const lesson = `###### HELLO WORLD
-  # Welcome
-  Python is a programming language. Like other languages, it gives us a way to communicate ideas. In the case of a programming language, these ideas are “commands” that people use to communicate with a computer!
-  
-  We convey our commands to the computer by writing them in a text file using a programming language. These files are called programs. Running a program means telling a computer to read the text file, translate it to the set of operations that it understands, and perform those actions.
-  `;
+function EditorLesson({ innerRef, overview, instructions, module_path }) {
 
-  const instructions = `
-  
-  Change \`PythonLMS\` to your name in the script to the right. Run the code to see what it does!
-  
-  As soon as you’re ready, move on to the next exercise to begin learning to write your own Python programs!
-  `;
+  const url = useLocation();
+  const navigate = useNavigate();
 
-  // const hints = [];
+  console.log(url);
 
-  return (
-    <div ref={innerRef} id="lesson" className="text-start">
+  if (overview === undefined || overview === null || overview === "" || url.state === null) {
+    overview = "###### Sandbox\n # Welcome to PythonLMS\nWelcome to the Python Playground! On this magical editor page, you get to write and play with Python code like a wizard casting spells. The editor is your enchanted quill that helps you write Python spells, and with a wave of your wand (or rather, a click of a button!), watch your code come to life! It's like painting with colors but with words! Fix your potions, create new spells, and see the magic happen right before your eyes. Dive in, explore, and have a blast learning the language of the future! ";
+  }
+  if (instructions === undefined || instructions === null || instructions === "" || url.state === null) {
+    instructions = "Toggle the canvas then try running the code in the editor!";
+  }
+
+  let module_path_string = "";
+
+  if (module_path !== undefined && module_path !== null && module_path.length !== 0) {
+    module_path_string = module_path.join("/")
+  }
+
+// const hints = [];
+
+return (
+  <div ref={innerRef} id="lesson" className="text-start">
       <div className="ps-2 fw-bold fs-5 instruction-divider">
         <i className="bi bi-eyeglasses h5 pe-2"></i>Learn{" "}
       </div>
 
+      <div className="pt-4 ps-4 pe-4 pb-2 markdown-body">
+        <h6 className="module-path" onClick={() => navigate(-1)}>{module_path_string}</h6>
+      </div>
+
       <Markdown
-        children={lesson}
-        className="p-4 markdown-body"
+        children={overview}
+        className="ps-4 pe-4 pb-4 markdown-body"
         // remarkPlugins={}
         urlTransform={(url) =>
           url.startsWith("data") ? url : defaultUrlTransform(url)
