@@ -88,7 +88,7 @@ print("Hello World")`;
     } else {
       setCode(defaultCode);
     }
-  });
+  }, [defaultCode, sandbox]);
 
   const checkOuput = () => {};
 
