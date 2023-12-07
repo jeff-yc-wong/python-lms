@@ -69,6 +69,7 @@ function Editor() {
     let title = "";
     let module_path = [];
     let sandbox = true;
+    let checker = null;
     if (url.state != null) {
       if ("module_path" in url.state) {
         module_path = url.state.module_path;
@@ -79,6 +80,7 @@ function Editor() {
       overview = exerciseData.overview;
       instructions = exerciseData.instructions;
       defaultCode = exerciseData.template;
+      checker = exerciseData.checker;
       sandbox = false;
     }
     return (
@@ -91,7 +93,7 @@ function Editor() {
             gutterAlign="center"
           >
             <EditorLesson innerRef={lessonRef} overview={overview} instructions={instructions} module_path={module_path} title={title} exercise_ref={exercisesRef}/>
-            <CodeEditor innerRef={editorRef} defaultCode={defaultCode} sandbox={sandbox}/>
+            <CodeEditor innerRef={editorRef} defaultCode={defaultCode} checker={checker} exercise_id={url.state.exercise_id} sandbox={sandbox}/>
           </Split>
         </div>
       </>

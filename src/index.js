@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
@@ -24,8 +24,12 @@ const ModuleList = React.lazy(() => import("./pages/ModuleList/ModuleList"));
 const LoginPage = React.lazy(() => import("./pages/Login/Login"));
 const LessonsPage = React.lazy(() => import("./pages/Lessons/Lessons"));
 const HomePage = React.lazy(() => import("./pages/HomePage/HomePage"));
-const UploadLesson = React.lazy(() => import("./pages/UploadLesson/UploadLesson"));
+const UploadLesson = React.lazy(() =>
+  import("./pages/UploadLesson/UploadLesson")
+);
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage/ErrorPage"));
+
+export const UserContext = React.createContext(null);
 
 // eslint-disable-next-line
 function ProtectedRoute({ children }) {
@@ -57,7 +61,11 @@ function ProtectedRoute({ children }) {
   } else if (user === null) {
     return <Navigate to="/login" />;
   } else {
-    return children;
+    return (
+      <UserContext.Provider value={{ user: user }}>
+        {children}
+      </UserContext.Provider>
+    );
   }
   // return children;
 }

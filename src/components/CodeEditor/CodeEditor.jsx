@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-noconflict/ext-language_tools";
 import "./CodeEditor.css";
+import { collection, getDoc, doc, updateDoc } from "firebase/firestore";
+import db from "../../service/firebase";
+import { UserContext } from "../../";
 
 function outf(text) {
   var mypre = document.getElementById("output");
@@ -60,20 +63,35 @@ function clearOutput() {
   document.getElementById("output").innerHTML = "";
 }
 
-function CodeEditor({ innerRef, defaultCode, sandbox }) {
+function CodeEditor({ innerRef, defaultCode, checker, exercise_id, sandbox }) {
   const [code, setCode] = useState("");
   const [showCanvas, setShowCanvas] = useState(false);
+  const [canCheckAnswer, setCanCheckAnswer] = useState(false);
+  const [answerCorrect, setAnswerCorrect] = useState(false);
+  const { user } = useContext(UserContext);
   const canvasRef = useRef(null);
 
   const initialState = showCanvas.valueOf();
 
+  console.log(user);
+
   const handleCodeChange = (e) => {
     setCode(e);
+    try {
+      let collectionRef = collection(db, `codeSessions/${user.uid}/exercises`);
+      let docRef = doc(collectionRef, exercise_id);
+      if (docRef !== null) {
+        updateDoc(docRef, { code: e }).catch((error) => {
+          console.log(error);
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     if (sandbox === true) {
-      let templateCode = 
-`import turtle
+      let templateCode = `import turtle
 
 t = turtle.Turtle()
 
@@ -90,7 +108,56 @@ print("Hello World")`;
     }
   }, [defaultCode, sandbox]);
 
-  const checkOuput = () => {};
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(exercise_id);
+      let collectionRef = collection(db, `codeSessions/${user.uid}/exercises`);
+      let documentSnapshot = await getDoc(doc(collectionRef, exercise_id));
+
+      if (documentSnapshot.data() != null) {
+        if ("code" in documentSnapshot.data()) {
+          let code = documentSnapshot.data().code;
+          setCode(code);
+        }
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  const checkAnswer = async () => {
+    console.log(checker);
+    if (checker !== null) {
+      let check_type = checker.check_type;
+
+      if (check_type == "output") {
+        console.log(code);
+        let output = document.getElementById("output").innerText;
+        output = output.substring(0, output.length - 1);
+        let expected_output = checker.answer;
+        if (output == expected_output) {
+          alert("Correct Answer!");
+          setAnswerCorrect(true);
+        } else if (output == "") {
+          alert("No Output!");
+        } else {
+          alert("Incorrect Answer!");
+        }
+      }
+
+      if (check_type == "code") {
+      }
+
+      if (check_type == "syntax") {
+      }
+    }
+  };
+
+  const handleCodeRun = async () => {
+    runit(code);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setCanCheckAnswer(true);
+  };
 
   const editor_style = {
     fontFamily:
@@ -131,18 +198,26 @@ print("Hello World")`;
           <button
             className="mt-3 btn btn-success float-start"
             type="button"
-            onClick={() => runit(code)}
+            onClick={handleCodeRun}
           >
             Run
           </button>
-          <button
-            className="mt-3 ms-2 btn btn-danger float-start"
-            type="button"
-            onClick={checkOuput}
-          >
-            <i className="me-1 bi bi-square"></i>
-            Check Answer
-          </button>
+          {canCheckAnswer && checker != null && (
+            <button
+              className={`mt-3 ms-2 btn float-start ${
+                !answerCorrect ? "btn-danger" : "btn-success"
+              }`}
+              type="button"
+              onClick={checkAnswer}
+            >
+              <i
+                className={`me-1 bi ${
+                  !answerCorrect ? "bi-square" : "bi-check-square"
+                }`}
+              ></i>
+              Check Answer
+            </button>
+          )}
           <div className="mt-3 form-check form-switch float-end fs-5">
             <input
               className="form-check-input"
