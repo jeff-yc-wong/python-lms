@@ -60,23 +60,8 @@ function clearOutput() {
   document.getElementById("output").innerHTML = "";
 }
 
-function CodeEditor({ innerRef, defaultCode }) {
-  if (defaultCode === undefined || defaultCode === null || defaultCode === "") {
-  defaultCode =
-`import turtle
-
-t = turtle.Turtle()
-
-for c in ['red', 'green', 'yellow', 'blue']:
-    t.color(c)
-    t.forward(75)
-    t.left(90)
-    
-    
-print("Hello World")`;
-  }
-
-  const [code, setCode] = useState(defaultCode);
+function CodeEditor({ innerRef, defaultCode, sandbox }) {
+  const [code, setCode] = useState("");
   const [showCanvas, setShowCanvas] = useState(false);
   const canvasRef = useRef(null);
 
@@ -85,6 +70,27 @@ print("Hello World")`;
   const handleCodeChange = (e) => {
     setCode(e);
   };
+  useEffect(() => {
+    if (sandbox === true) {
+      let templateCode = 
+`import turtle
+
+t = turtle.Turtle()
+
+for c in ['red', 'green', 'yellow', 'blue']:
+    t.color(c)
+    t.forward(75)
+    t.left(90)
+      
+      
+print("Hello World")`;
+      setCode(templateCode);
+    } else {
+      setCode(defaultCode);
+    }
+  });
+
+  const checkOuput = () => {};
 
   const editor_style = {
     fontFamily:
@@ -95,12 +101,12 @@ print("Hello World")`;
     fontSize: "small",
     minWidth: "400px",
   };
-  
+
   const toggleCanvas = () => {
     setShowCanvas(!showCanvas);
-  }
+  };
 
-  useEffect(() => { 
+  useEffect(() => {
     let canvas = canvasRef.current;
     if (initialState) {
       canvas.classList.add("show");
@@ -116,7 +122,7 @@ print("Hello World")`;
             mode="python"
             theme="twilight"
             onChange={handleCodeChange}
-            defaultValue={defaultCode}
+            value={code}
             style={editor_style}
             showPrintMargin={false}
             scrollMargin={[10, 10, 0, 0]}
@@ -129,9 +135,15 @@ print("Hello World")`;
           >
             Run
           </button>
-          <div
-            className="mt-3 form-check form-switch float-end fs-5"
+          <button
+            className="mt-3 ms-2 btn btn-danger float-start"
+            type="button"
+            onClick={checkOuput}
           >
+            <i className="me-1 bi bi-square"></i>
+            Check Answer
+          </button>
+          <div className="mt-3 form-check form-switch float-end fs-5">
             <input
               className="form-check-input"
               type="checkbox"
@@ -150,7 +162,11 @@ print("Hello World")`;
             </label>
           </div>
         </div>
-        <div ref={canvasRef} id="canvas-div" className={`col-md-auto collapse-horizontal collapse`}>
+        <div
+          ref={canvasRef}
+          id="canvas-div"
+          className={`col-md-auto collapse-horizontal collapse`}
+        >
           <h3 className="text-start">Canvas</h3>
           <div id="mycanvas"></div>
         </div>
@@ -160,7 +176,7 @@ print("Hello World")`;
         <div className="col">
           <pre id="output" className="bg-dark text-bg-dark" />
           <button
-            className="pt-1 btn btn-success float-end"
+            className="pt-1 btn btn-light float-start"
             type="button"
             onClick={clearOutput}
           >

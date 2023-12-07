@@ -7,12 +7,20 @@ import Loading from "../Loading/Loading";
 import "./ModuleList.css";
 
 const ModulesList = () => {
-  const [expandedModules, setExpandedModules] = useState([]);
+  const [expandedModules, setExpandedModules] = useState(
+    localStorage.getItem("expandedModules")
+      ? JSON.parse(localStorage.getItem("expandedModules"))
+      : []
+  );
   const [modules, setModules] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [moduleCards, setModuleCards] = useState([]);
   const url = useLocation();
+
+  useEffect(() => {
+    localStorage.setItem("expandedModules", JSON.stringify(expandedModules));
+  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -98,15 +106,15 @@ const ModulesList = () => {
             ),
             orderBy("order")
           );
-          let exercises = await getDocs(q);
-          exercises = exercises.docs.map((exercise) => {
-            return { id: exercise.id, ...exercise.data() };
-          });
+          // let exercises = await getDocs(q);
+          // exercises = exercises.docs.map((exercise) => {
+          //   return { id: exercise.id, ...exercise.data() };
+          // });
 
-          return { id: doc.id, ...doc.data(), exercises: exercises };
+          return { id: doc.id, ...doc.data() };
         })
       );
-      // console.log(output);
+      // console.log(output)
       setModules(output);
     };
 
@@ -170,12 +178,23 @@ const ModulesList = () => {
                                     submodule.exercises.map(
                                       (exercise, exindex) => (
                                         <li
-                                          key={exercise.id}
+                                          key={exercise.reference}
                                           className="list-group-item"
                                         >
                                           <Link
                                             to="/editor"
-                                            state={{ exercise_id: exercise.id, module_path: [module.title, submodule.title] }}
+                                            state={{
+                                              exercise_id: exercise.reference,
+                                              module_path: [
+                                                module.title,
+                                                submodule.title,
+                                              ],
+                                              exercisesRef: {
+                                                index: exindex,
+                                                lesson_id: url.state.lesson_id,
+                                                exercises: module.exercises,
+                                              },
+                                            }}
                                             className="text-dark"
                                           >
                                             {`${index + 1}.${subindex + 1}.${
@@ -197,11 +216,22 @@ const ModulesList = () => {
                     // Checks if there are exercises then create a list group for each exercise
                     "exercises" in module &&
                       module.exercises.map((exercise, exindex) => (
-                        <li key={exercise.id} className="list-group-item">
+                        <li
+                          key={exercise.reference}
+                          className="list-group-item"
+                        >
                           <Link
                             to="/editor"
                             className="text-dark"
-                            state={{ exercise_id: exercise.id, module_path: [module.title] }}
+                            state={{
+                              exercise_id: exercise.reference,
+                              module_path: [module.title],
+                              exercisesRef: {
+                                index: exindex,
+                                lesson_id: url.state.lesson_id,
+                                exercises: module.exercises,
+                              },
+                            }}
                           >
                             {`${index + 1}.${exindex + 1} ${exercise.title}`}
                           </Link>
@@ -217,7 +247,7 @@ const ModulesList = () => {
       setModuleCards(module_cards);
       setIsLoading(false);
     }
-  }, [modules, expandedModules]);
+  }, [modules, expandedModules, url]);
 
   if (hasError) {
     return <Navigate to="/errors" />;

@@ -13,13 +13,14 @@ function Editor() {
   const editorRef = useRef(null);
   const url = useLocation();
   const [exerciseData, setExerciseData] = useState(null);
+  const [exercisesRef, setExercisesRef] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (exercise_id) => {
       const collectionRef = collection(db, "exercises");
       const documentSnapshot = await getDoc(
-        doc(collectionRef, "KzDG3NH84hfjFQajTcKM")
+        doc(collectionRef, exercise_id)
       );
 
       setExerciseData({ id: documentSnapshot.id, ...documentSnapshot.data() });
@@ -27,10 +28,16 @@ function Editor() {
     };
     setIsLoading(true);
     if (url.state != null) {
+      // console.log(url.state)
+      if ("exercisesRef" in url["state"]) {
+        var exercisesRef = url.state.exercisesRef;
+        setExercisesRef(exercisesRef);
+      }
       if ("exercise_id" in url["state"]) {
         var exercise_id = url.state.exercise_id;
-        console.log(exercise_id)
-        fetchData();
+        // console.log(exercise_id)
+        fetchData(exercise_id);
+
       } else {
         setIsLoading(false);
         return () => {};
@@ -61,16 +68,18 @@ function Editor() {
     let defaultCode = "";
     let title = "";
     let module_path = [];
+    let sandbox = true;
     if (url.state != null) {
       if ("module_path" in url.state) {
         module_path = url.state.module_path;
       }
     }
-    if (exerciseData !== null) {
-      title = exerciseData.title
-      overview = exerciseData.overview
-      instructions = exerciseData.instructions
-      defaultCode = exerciseData.template
+    if (exerciseData !== null && url.state !== null) {
+      title = exerciseData.title;
+      overview = exerciseData.overview;
+      instructions = exerciseData.instructions;
+      defaultCode = exerciseData.template;
+      sandbox = false;
     }
     return (
       <>
@@ -81,8 +90,8 @@ function Editor() {
             gutterSize={12}
             gutterAlign="center"
           >
-            <EditorLesson innerRef={lessonRef} overview={overview} instructions={instructions} module_path={module_path} title={title}/>
-            <CodeEditor innerRef={editorRef} defaultCode={defaultCode} />
+            <EditorLesson innerRef={lessonRef} overview={overview} instructions={instructions} module_path={module_path} title={title} exercise_ref={exercisesRef}/>
+            <CodeEditor innerRef={editorRef} defaultCode={defaultCode} sandbox={sandbox}/>
           </Split>
         </div>
       </>

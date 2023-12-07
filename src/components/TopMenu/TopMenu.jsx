@@ -183,11 +183,13 @@ function TopMenu({ lessonTitle }) {
                     className={`nav-link ${
                       currentLink === "profile" ? "active" : ""
                     }`}
+                    state={null}
                     to="/editor"
                     style={{ fontSize: "20px", margin: "10px" }}
+                    reload="true"
                     onClick={() => toggleMenu("profile")}
                   >
-                    Editor
+                    Sandbox
                   </Link>
                 </li>
                 <li className="nav-item">

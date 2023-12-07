@@ -22,3 +22,7 @@ code {
   color: lightblue;
   text-decoration: underline;
 }
+
+.markdown-body ul.contains-task-list {
+  padding: 0px;
+}
