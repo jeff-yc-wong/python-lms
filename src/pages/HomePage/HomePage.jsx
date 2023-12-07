@@ -36,7 +36,7 @@ const HomePage = () => {
     return <Loading />;
   } else {
     return (
-      <Container className="mt-5">
+      <Container className="mt-5 text-light">
         <Row className="mt-5">
           <Col md={6}>
             <h1>Welcome to Python LMS</h1>

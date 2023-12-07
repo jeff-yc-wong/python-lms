@@ -2,10 +2,6 @@
     padding-top: 20px;
   }
   
-h1, p, h2, li {
-  color: white;
-}
-
 .featured-courses {
   list-style: none;
   padding: 0;
