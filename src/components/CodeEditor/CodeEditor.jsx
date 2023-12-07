@@ -4,7 +4,7 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-noconflict/ext-language_tools";
 import "./CodeEditor.css";
-import { collection, getDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, getDoc, doc, setDoc } from "firebase/firestore";
 import db from "../../service/firebase";
 import { UserContext } from "../../";
 
@@ -77,16 +77,21 @@ function CodeEditor({ innerRef, defaultCode, checker, exercise_id, sandbox }) {
 
   const handleCodeChange = (e) => {
     setCode(e);
-    try {
-      let collectionRef = collection(db, `codeSessions/${user.uid}/exercises`);
-      let docRef = doc(collectionRef, exercise_id);
-      if (docRef !== null) {
-        updateDoc(docRef, { code: e }).catch((error) => {
-          console.log(error);
-        });
+    if (sandbox === false) {
+      try {
+        let collectionRef = collection(
+          db,
+          `codeSessions/${user.uid}/exercises`
+        );
+        let docRef = doc(collectionRef, exercise_id);
+        if (docRef !== null) {
+          setDoc(docRef, { code: e }).catch((error) => {
+            console.log(error);
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
   useEffect(() => {
@@ -123,32 +128,32 @@ print("Hello World")`;
     };
 
     fetchData();
-  }, [user]);
+  }, [user, exercise_id]);
 
   const checkAnswer = async () => {
     console.log(checker);
     if (checker !== null) {
       let check_type = checker.check_type;
 
-      if (check_type == "output") {
+      if (check_type === "output") {
         console.log(code);
         let output = document.getElementById("output").innerText;
         output = output.substring(0, output.length - 1);
         let expected_output = checker.answer;
-        if (output == expected_output) {
+        if (output === expected_output) {
           alert("Correct Answer!");
           setAnswerCorrect(true);
-        } else if (output == "") {
+        } else if (output === "") {
           alert("No Output!");
         } else {
           alert("Incorrect Answer!");
         }
       }
 
-      if (check_type == "code") {
+      if (check_type === "code") {
       }
 
-      if (check_type == "syntax") {
+      if (check_type === "syntax") {
       }
     }
   };
