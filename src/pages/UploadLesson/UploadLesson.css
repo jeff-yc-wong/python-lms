@@ -4,4 +4,16 @@
 
 .ace-editor-container {
   border-right: 1px solid grey;
+  scrollbar-color: lightgray transparent;
+} 
+
+#lesson-editor {
+  height: 90vh;
+}
+
+#result {
+  overflow: auto;
+  scroll-behavior: smooth;
+  height: 100%;
+  scrollbar-color: lightgray transparent;
 }

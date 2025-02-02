@@ -15,6 +15,7 @@ function EditorLesson({
   module_path,
   title,
   exercise_ref,
+  sandbox,
 }) {
   const url = useLocation();
   const navigate = useNavigate();
@@ -106,7 +107,7 @@ function EditorLesson({
       <div className="ps-2 fw-bold fs-5 instruction-divider">
         <i className="bi bi-eyeglasses h5 pe-2"></i>Learn{" "}
       </div>
-      {exercise_ref != null ? (
+      {exercise_ref != null || sandbox === false? (
         <div>
           <button className="btn btn-link text-light" onClick={handleClick}>
             <i className="bi bi-arrow-left h4"></i>

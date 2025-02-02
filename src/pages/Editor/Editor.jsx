@@ -70,6 +70,7 @@ function Editor() {
     let module_path = [];
     let sandbox = true;
     let checker = null;
+    let exercise_id = null;
     if (url.state != null) {
       if ("module_path" in url.state) {
         module_path = url.state.module_path;
@@ -81,8 +82,11 @@ function Editor() {
       instructions = exerciseData.instructions;
       defaultCode = exerciseData.template;
       checker = exerciseData.checker;
+      exercise_id = exerciseData.id
       sandbox = false;
     }
+
+    console.log("sandbox", sandbox);
     return (
       <>
         <div className="editor-page">
@@ -92,8 +96,8 @@ function Editor() {
             gutterSize={12}
             gutterAlign="center"
           >
-            <EditorLesson innerRef={lessonRef} overview={overview} instructions={instructions} module_path={module_path} title={title} exercise_ref={exercisesRef}/>
-            <CodeEditor innerRef={editorRef} defaultCode={defaultCode} checker={checker} exercise_id={url.state.exercise_id} sandbox={sandbox}/>
+            <EditorLesson innerRef={lessonRef} overview={overview} instructions={instructions} module_path={module_path} title={title} exercise_ref={exercisesRef} sandbox={sandbox}/>
+            <CodeEditor innerRef={editorRef} defaultCode={defaultCode} checker={checker} exercise_id={exercise_id} sandbox={sandbox}/>
           </Split>
         </div>
       </>

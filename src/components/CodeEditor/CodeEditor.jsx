@@ -114,6 +114,9 @@ print("Hello World")`;
   }, [defaultCode, sandbox]);
 
   useEffect(() => {
+    if (sandbox === true) {
+      return;
+    } 
     const fetchData = async () => {
       console.log(exercise_id);
       let collectionRef = collection(db, `codeSessions/${user.uid}/exercises`);

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import remarkGfm from "remark-gfm";
+import { remarkAlert } from 'remark-github-blockquote-alert';
 import Markdown, { defaultUrlTransform } from "react-markdown";
 import AceEditor from "react-ace";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -31,16 +32,17 @@ function UploadLesson() {
               }}
               showPrintMargin={false}
               style={{
-                width: "80%",
+                width: "100%",
+                height: "100%",
               }}
             />
           </div>
-          <div className="p-4 col">
-            <div className="result">
+          <div className="p-4 col h-100">
+            <div id="result">
               <Markdown
                 children={text}
                 className="markdown-body"
-                remarkPlugins={[remarkGfm]}
+                remarkPlugins={[remarkGfm, remarkAlert]}
                 urlTransform={(url) =>
                   url.startsWith("data") ? url : defaultUrlTransform(url)
                 }
