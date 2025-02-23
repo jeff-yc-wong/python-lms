@@ -131,7 +131,7 @@ print("Hello World")`;
     };
 
     fetchData();
-  }, [user, exercise_id]);
+  }, [user, exercise_id, sandbox]);
 
   const checkAnswer = async () => {
     console.log(checker);
